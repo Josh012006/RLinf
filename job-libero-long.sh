@@ -9,12 +9,12 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=josue.mongan@mila.quebec
 #SBATCH --no-requeue
-#SBATCH --exclude=cn-g011
+#SBATCH --exclude=cn-g011,cn-g008,cn-g012,cn-g026,cn-g025,cn-g015,cn-g017
 
-# Job script for LIBERO-90 GRPO fine-tuning with OpenVLA-OFT on a single A100L
-# Requires: RLinf installed in .venv, RLinf-OpenVLAOFT-LIBERO-90-Base-Lora model downloaded
-# Adapt model paths in examples/embodiment/config/libero_90_grpo_openvlaoft.yaml before running
-# Submit with: sbatch job-libero-90.sh
+# Job script for LIBERO-Long GRPO fine-tuning with OpenVLA-OFT on a single A100L
+# Requires: RLinf installed in .venv-libero, Openvla-oft-SFT-libero10-traj1 model downloaded
+# Adapt model paths in examples/embodiment/config/libero_10_grpo_openvlaoft.yaml before running
+# Submit with: sbatch job-libero-long.sh
 
 set -e
 echo "Date:     $(date)"
@@ -27,7 +27,7 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 (
   while true; do
     sleep 1800
-    ls -dt ~/projects/libero_rl/RLinf/logs/*/libero_90_grpo_openvlaoft/checkpoints/global_step_* 2>/dev/null | tail -n +3 | xargs rm -rf
+    ls -dt ~/projects/libero_rl/RLinf/logs/*/libero_10_grpo_openvlaoft/checkpoints/global_step_* 2>/dev/null | tail -n +3 | xargs rm -rf
   done
 ) &
 CLEANUP_PID=$!
@@ -38,4 +38,4 @@ trap "kill $CLEANUP_PID 2>/dev/null" EXIT
 cd ~/projects/libero_rl/RLinf
 source .venv-libero/bin/activate
 unset RAY_ADDRESS
-exec srun bash examples/embodiment/run_embodiment.sh libero_90_grpo_openvlaoft
+exec srun bash examples/embodiment/run_embodiment.sh libero_10_grpo_openvlaoft

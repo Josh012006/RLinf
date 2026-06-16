@@ -899,6 +899,8 @@ def validate_embodied_cfg(cfg):
                 elif "google_robot_static" in robot:
                     return "arm_pd_ee_delta_pose_align_interpolate_by_planner_gripper_pd_joint_target_delta_pos_interpolate_by_planner"
                 elif "widowx" in robot:
+                    if cfg.env.train.init_params.get("id", "").startswith("StackCube"):
+                        return "pd_ee_delta_pose"
                     return "arm_pd_ee_target_delta_pose_align2_gripper_pd_joint_pos"
                 elif "panda" in robot:
                     return "pd_ee_body_target_delta_pose_real_root_frame"

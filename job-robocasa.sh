@@ -7,8 +7,9 @@
 #SBATCH --time=120:00:00
 #SBATCH --signal=B:TERM@300
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=your@mail.com
-#SBATCH --exclude=cn-g011
+#SBATCH --mail-user=josue.mongan@mila.quebec
+#SBATCH --no-requeue
+#SBATCH --exclude=cn-g001,cn-g011,cn-g008,cn-g012,cn-g026,cn-g025,cn-g015,cn-g017,cn-g024
 
 # Job script for RoboCasa CloseDrawer PPO fine-tuning with π0 on a single A100L
 # Requires: RLinf installed in .venv, RLinf-Pi0-RoboCasa model downloaded
@@ -25,14 +26,14 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 (
   while true; do
     sleep 1800
-    ls -dt /path/to/RLinf/logs/*/robocasa_closedrawer_ppo_openpi/checkpoints/global_step_* 2>/dev/null | tail -n +3 | xargs rm -rf
+    ls -dt ~/projects/libero_rl/RLinf/logs/*/robocasa_closedrawer_ppo_openpi/checkpoints/global_step_* 2>/dev/null | tail -n +3 | xargs rm -rf
   done
 ) &
 CLEANUP_PID=$!
 trap "kill $CLEANUP_PID 2>/dev/null" EXIT
 
 # Adapt the path below to your project directory
-cd /path/to/RLinf
-source .venv/bin/activate
-
+cd ~/projects/libero_rl/RLinf
+source .venv-robocasa/bin/activate
+unset RAY_ADDRESS
 exec srun bash examples/embodiment/run_embodiment.sh robocasa_closedrawer_ppo_openpi

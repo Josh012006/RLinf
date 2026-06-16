@@ -71,6 +71,7 @@ class ManiskillEnv(gym.Env):
         with open_dict(cfg):
             cfg.init_params.num_envs = num_envs
         env_args = OmegaConf.to_container(cfg.init_params, resolve=True)
+        env_args.pop('task_description', None)
         self.env: BaseEnv = gym.make(**env_args)
         self.prev_step_reward = torch.zeros(self.num_envs, dtype=torch.float32).to(
             self.device
@@ -174,6 +175,7 @@ class ManiskillEnv(gym.Env):
                     "main_images": main_images,
                     "extra_view_images": extra_view_images,
                     "states": state,
+                    "task_descriptions": self.instruction if hasattr(self.env.unwrapped, "get_language_instruction") else [self.cfg.init_params.get("task_description", "stack the red cube on top of the green cube")] * self.cfg.total_num_envs,
                 }
 
         # Default

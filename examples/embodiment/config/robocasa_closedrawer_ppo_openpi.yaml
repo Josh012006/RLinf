@@ -26,14 +26,14 @@ runner:
     experiment_name: "robocasa_closedrawer_ppo_openpi"
     logger_backends: ["tensorboard"] # wandb, swanlab
 
-  max_epochs: 150
+  max_epochs: 75
   max_steps: -1
 
   only_eval: False
   val_check_interval: -1
-  save_interval: 10
+  save_interval: 5
 
-  resume_dir: null # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
+  resume_dir: null # "/home/mila/m/monganj/projects/libero_rl/RLinf/logs/20260607-12:08:09-robocasa_closedrawer_ppo_openpi/robocasa_closedrawer_ppo_openpi/checkpoints/global_step_50" # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
   ckpt_path: null  # Optional: path to a .pt checkpoint. If not None, it will be loaded after the model is instantiated (for evaluation).
 
 algorithm:
@@ -89,8 +89,8 @@ env:
 
   train:
     total_num_envs: 8
-    max_episode_steps: 300
-    max_steps_per_rollout_epoch: 300
+    max_episode_steps: 240
+    max_steps_per_rollout_epoch: 240
     group_size: ${algorithm.group_size}
     reward_coef: ${algorithm.reward_coef}
     video_cfg:
@@ -102,8 +102,8 @@ env:
     total_num_envs: 5
     auto_reset: True
     ignore_terminations: True
-    max_episode_steps: 300
-    max_steps_per_rollout_epoch: 300
+    max_episode_steps: 240
+    max_steps_per_rollout_epoch: 240
     use_fixed_reset_state_ids: True
     use_ordered_reset_state_ids: True
     is_eval: True
@@ -121,7 +121,7 @@ rollout:
   pipeline_stage_num: 1
 
   model:
-    model_path: "/path/to/model/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
+    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
     precision: ${actor.model.precision}
 
 actor:
@@ -133,7 +133,7 @@ actor:
   enable_offload: True
 
   model:
-    model_path: "/path/to/model/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
+    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
     model_type: "openpi"
     num_action_chunks: 5
     num_steps: 5

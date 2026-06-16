@@ -1,7 +1,7 @@
 defaults:
-  - env/libero_90@env.train
-  - env/libero_90@env.eval
-  - model/openvla_oft@actor.model
+  - env/maniskill_stack_cube@env.train
+  - env/maniskill_stack_cube@env.eval
+  - model/openvla@actor.model
   - training_backend/fsdp@actor.fsdp_config
   - weight_syncer/patch_syncer@weight_syncer
   - override hydra/job_logging: stdout
@@ -16,22 +16,22 @@ hydra:
 cluster:
   num_nodes: 1
   component_placement:
-    env,rollout,actor: all
+    actor,env,rollout: all
 
 runner:
   task_type: embodied
   logger:
-    log_path: "../results"
+    log_path: "./logs"
     project_name: rlinf
-    experiment_name: "libero_90_grpo_openvlaoft"
+    experiment_name: "maniskill_grpo_openvla_stackcube"
     logger_backends: ["tensorboard"] # wandb, swanlab
 
-  max_epochs: 500
+  max_epochs: 250
   max_steps: -1
 
   only_eval: False
   val_check_interval: -1
-  save_interval: 25
+  save_interval: 5
 
   resume_dir: null # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
   ckpt_path: null  # Optional: path to a .pt checkpoint. If not None, it will be loaded after the model is instantiated (for evaluation).
@@ -39,11 +39,11 @@ runner:
 algorithm:
   normalize_advantages: True
   kl_penalty: kl  # how to estimate kl divergence: kl or kl_penalty
-  group_size: 2
+  group_size: 8
   rollout_epoch: 1
   eval_rollout_epoch: 1 # set eval_rollout_epoch > 0 when enable runner.only_eval or runner.val_check_interval > 0
 
-  reward_type: action_level  # action_level or chunk_level
+  reward_type: action_level
   logprob_type: token_level
   entropy_type: token_level
 
@@ -61,49 +61,38 @@ algorithm:
   gamma: 0.99
   gae_lambda: 0.95
 
-  reward_coef: 5.0
-
+  # params for generation
   sampling_params:
     do_sample: True
-    temperature_train: 1.6
-    temperature_eval: 1.6
-    top_k: -1
+    temperature_train: 1.0
+    temperature_eval: 0.6
+    top_k: 50
     top_p: 1.0
     repetition_penalty: 1.0
 
   # length argument for autoregressive sampling
   # max length means max amount of tokens to generate
   length_params:
-    max_new_token: null
-    max_length: 512
+    max_new_token: 7
+    max_length: 1024
     min_length: 1
-
-  filter_rewards: True
-  rewards_lower_bound: 0.5
-  rewards_upper_bound: 4.5
 
 env:
   group_name: "EnvGroup"
 
-  # Override the default values in env/libero_90
+  # Override the default values in env/maniskill_put_on_plate_in_scene_25_main
   train:
-    total_num_envs: 2
-    max_episode_steps: 512 # max episode steps for truncation
-    max_steps_per_rollout_epoch: 512
-    reward_coef: ${algorithm.reward_coef}
+    total_num_envs: 16
     group_size: ${algorithm.group_size}
-    reset_gripper_open: False
+    max_episode_steps: 320 # max episode steps for truncation
+    max_steps_per_rollout_epoch: 320
   eval:
-    total_num_envs: 2
+    total_num_envs: 16
     auto_reset: True
     ignore_terminations: True
-    max_episode_steps: 512
-    max_steps_per_rollout_epoch: 512
+    max_episode_steps: 320
+    max_steps_per_rollout_epoch: 320
     group_size: 1
-    use_fixed_reset_state_ids: True
-    use_ordered_reset_state_ids: True
-    reset_gripper_open: False
-    is_eval: True
     video_cfg:
       save_video: True
       video_base_dir: ${runner.logger.log_path}/video/eval
@@ -115,29 +104,25 @@ rollout:
   pipeline_stage_num: 1
 
   model:
-    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/RLinf-OpenVLAOFT-LIBERO-90-Base-Lora" # https://huggingface.co/RLinf/RLinf-OpenVLAOFT-LIBERO-90-Base-Lora
+    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/openvla-7b-rlvla-warmup/" # https://huggingface.co/gen-robot/openvla-7b-rlvla-warmup
     precision: ${actor.model.precision}
 
 actor:
   group_name: "ActorGroup"
   training_backend: "fsdp"
-  micro_batch_size: 1
-  global_batch_size: 4
+  micro_batch_size: 4
+  global_batch_size: 128
   seed: 1234
   enable_offload: True
 
-  # Override the default values in model/openvla_oft
+  # Override the default values in model/openvla
   model:
-    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/RLinf-OpenVLAOFT-LIBERO-90-Base-Lora" # https://huggingface.co/RLinf/RLinf-OpenVLAOFT-LIBERO-90-Base-Lora
-    model_type: "openvla_oft"
-    unnorm_key: libero_90_no_noops_trajall
-    max_prompt_length: 128
+    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/openvla-7b-rlvla-warmup/" # https://huggingface.co/gen-robot/openvla-7b-rlvla-warmup
 
-    is_lora: True
-    lora_rank: 32
+    max_prompt_length: 30
 
   optim:
-    lr: 2.0e-5
+    lr: 1.0e-5
     value_lr: 3.0e-3
     adam_beta1: 0.9
     adam_beta2: 0.999
