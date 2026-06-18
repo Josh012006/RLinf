@@ -38,6 +38,7 @@ trap "kill $CLEANUP_PID 2>/dev/null; rm -rf /tmp/ray/session_* 2>/dev/null || tr
 cd ~/projects/libero_rl/RLinf
 source .venv-maniskill/bin/activate
 unset RAY_ADDRESS
+rm -rf /tmp/ray/session_* 2>/dev/null || true
 
 # Install libvulkan if not already present
 VULKAN_DIR=~/projects/libero_rl/vulkan

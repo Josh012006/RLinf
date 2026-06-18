@@ -33,7 +33,7 @@ runner:
   val_check_interval: -1
   save_interval: 5
 
-  resume_dir: "/home/mila/m/monganj/projects/libero_rl/RLinf/logs/20260616-01:45:41-maniskill_grpo_openvla_stackcube/maniskill_grpo_openvla_stackcube/checkpoints/global_step_105" # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
+  resume_dir: "/home/mila/m/monganj/projects/libero_rl/RLinf/logs/20260617-16:37:22-maniskill_grpo_openvla_stackcube/maniskill_grpo_openvla_stackcube/checkpoints/global_step_125" # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
   ckpt_path: null  # Optional: path to a .pt checkpoint. If not None, it will be loaded after the model is instantiated (for evaluation).
 
 algorithm:

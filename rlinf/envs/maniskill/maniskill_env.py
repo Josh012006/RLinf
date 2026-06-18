@@ -175,7 +175,7 @@ class ManiskillEnv(gym.Env):
                     "main_images": main_images,
                     "extra_view_images": extra_view_images,
                     "states": state,
-                    "task_descriptions": self.instruction if hasattr(self.env.unwrapped, "get_language_instruction") else [self.cfg.init_params.get("task_description", "stack the red cube on top of the green cube")] * self.cfg.total_num_envs,
+                    "task_descriptions": self.instruction if hasattr(self.env.unwrapped, "get_language_instruction") else [self.cfg.init_params.get("task_description")] * self.num_envs,
                 }
 
         # Default
