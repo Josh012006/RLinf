@@ -36,7 +36,9 @@ trap "kill $CLEANUP_PID 2>/dev/null; rm -rf /tmp/ray/session_* 2>/dev/null || tr
 # Adapt the path below to your project directory
 cd /path/to/RLinf
 source .venv-maniskill/bin/activate
+
 unset RAY_ADDRESS
+rm -rf /tmp/ray/session_* 2>/dev/null || true
 
 # Adapt the paths here too
 # Install libvulkan if not already present

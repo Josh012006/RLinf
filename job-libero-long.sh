@@ -36,5 +36,8 @@ trap "kill $CLEANUP_PID 2>/dev/null; rm -rf /tmp/ray/session_* 2>/dev/null || tr
 # Adapt the path below to your project directory
 cd /path/to/RLinf
 source .venv-libero/bin/activate
+
 unset RAY_ADDRESS
+rm -rf /tmp/ray/session_* 2>/dev/null || true
+
 exec srun bash examples/embodiment/run_embodiment.sh libero_10_grpo_openvlaoft
