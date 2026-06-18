@@ -33,7 +33,7 @@ runner:
   val_check_interval: -1
   save_interval: 5
 
-  resume_dir: "/home/mila/m/monganj/projects/libero_rl/RLinf/logs/20260527-16:10:02-libero_10_grpo_openvlaoft/libero_10_grpo_openvlaoft/checkpoints/global_step_145" # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
+  resume_dir: null # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
   ckpt_path: null  # Optional: path to a .pt checkpoint. If not None, it will be loaded after the model is instantiated (for evaluation).
 
 algorithm:
@@ -116,7 +116,7 @@ rollout:
   pipeline_stage_num: 1
 
   model:
-    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/Openvla-oft-SFT-libero10-traj1"
+    model_path: "/path/to/model/Openvla-oft-SFT-libero10-traj1/"
     precision: ${actor.model.precision}
 
 actor:
@@ -129,7 +129,7 @@ actor:
 
   # Override the default values in model/openvla_oft
   model:
-    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/Openvla-oft-SFT-libero10-traj1"
+    model_path: "/path/to/model/Openvla-oft-SFT-libero10-traj1/"
     model_type: "openvla_oft"
     max_prompt_length: 128
 

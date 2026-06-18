@@ -33,7 +33,7 @@ runner:
   val_check_interval: -1
   save_interval: 5
 
-  resume_dir: null # "/home/mila/m/monganj/projects/libero_rl/RLinf/logs/20260607-12:08:09-robocasa_closedrawer_ppo_openpi/robocasa_closedrawer_ppo_openpi/checkpoints/global_step_50" # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
+  resume_dir: null # Optional: path to a saved checkpoint directory, such as 'checkpoints/global_step_10'. If not None, it will be used to resume training.
   ckpt_path: null  # Optional: path to a .pt checkpoint. If not None, it will be loaded after the model is instantiated (for evaluation).
 
 algorithm:
@@ -121,7 +121,7 @@ rollout:
   pipeline_stage_num: 1
 
   model:
-    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
+    model_path: "/path/to/model/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
     precision: ${actor.model.precision}
 
 actor:
@@ -133,7 +133,7 @@ actor:
   enable_offload: True
 
   model:
-    model_path: "/home/mila/m/monganj/projects/libero_rl/RLinf/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
+    model_path: "/path/to/model/RLinf-Pi0-RoboCasa" # https://huggingface.co/RLinf/RLinf-Pi0-RoboCasa
     model_type: "openpi"
     num_action_chunks: 5
     num_steps: 5
